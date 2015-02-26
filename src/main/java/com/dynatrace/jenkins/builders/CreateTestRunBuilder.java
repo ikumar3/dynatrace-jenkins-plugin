@@ -21,6 +21,7 @@ import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
 import hudson.util.Secret;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.Stapler;
@@ -39,6 +40,12 @@ public class CreateTestRunBuilder extends Builder {
 
   @Extension
   public static class Descriptor extends BuildStepDescriptor<Builder> {
+
+    @Override
+    public CreateTestRunBuilder newInstance(StaplerRequest req, JSONObject formData) throws FormException {
+      return new CreateTestRunBuilder(formData);
+    }
+
     @Override
     public boolean isApplicable(Class<? extends AbstractProject> aClass) {
       return true; // always allowed regardless of project type
@@ -49,6 +56,7 @@ public class CreateTestRunBuilder extends Builder {
       return DISPLAY_NAME;
     }
 
+    //--- fill the model to populate the form
     public ListBoxModel doFillCategoryItems() {
       ListBoxModel model = new ListBoxModel();
       model.add("Unit");
@@ -79,9 +87,47 @@ public class CreateTestRunBuilder extends Builder {
       return model;
     }
 
-    @Override
-    public CreateTestRunBuilder newInstance(StaplerRequest req, JSONObject formData) throws FormException {
-      return new CreateTestRunBuilder(formData);
+
+    //--- Validations
+
+    public FormValidation doCheckHost(@QueryParameter final String host) {
+      FormValidation validationResult;
+
+      if (StringUtils.isEmpty(StringUtils.trim(host))) {
+        validationResult = FormValidation
+                .error("Dynatrace Host cannot be empty");
+      } else {
+        validationResult = FormValidation.ok();
+      }
+
+      return validationResult;
+    }
+
+    public FormValidation doCheckUsername(@QueryParameter final String username) {
+      FormValidation validationResult;
+
+      if (StringUtils.isEmpty(StringUtils.trim(username))) {
+        validationResult = FormValidation
+                .error("Dynatrace Username cannot be empty");
+      } else {
+        validationResult = FormValidation.ok();
+      }
+
+      return validationResult;
+    }
+
+
+    public FormValidation doCheckPassword(@QueryParameter final String password) {
+      FormValidation validationResult;
+
+      if (StringUtils.isEmpty(StringUtils.trim(password))) {
+        validationResult = FormValidation
+                .error("Password for REST interface cannot be empty");
+      } else {
+        validationResult = FormValidation.ok();
+      }
+
+      return validationResult;
     }
 
     public FormValidation doTestDynatraceConnectionUserPass(
