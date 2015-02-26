@@ -2,6 +2,7 @@ package com.dynatrace.jenkins.rest;
 
 import com.dynatrace.jenkins.model.DynatraceConnectionInfo;
 import com.dynatrace.jenkins.model.DynatraceVersion;
+import com.dynatrace.jenkins.model.TestCategory;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -56,7 +57,7 @@ public class DynatraceServerEndpointImplTest {
 
   @Test
   public void testRegisterTestRun() {
-    DynatraceVersion version = new DynatraceVersion("1", "2","3", "4", "5");
+    DynatraceVersion version = new DynatraceVersion(TestCategory.UNIT, "1", "2","3", "4", "5");
     DynatraceConnectionInfo connectionInfo = new DynatraceConnectionInfo("192.168.56.102", 8021, "admin", "admin");
     DynatraceServerEndpoint endpoint = new DynatraceServerEndpointImpl(connectionInfo);
 
