@@ -1,0 +1,48 @@
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form" xmlns:c="/lib/credentials">
+    <f:entry title="${%dynatrace.rest.host.title}" description="${%dynatrace.rest.host.description}" field="host">
+        <f:textbox field="host" />
+    </f:entry>
+    <f:entry title="${%dynatrace.rest.port.title}" description="${%dynatrace.rest.port.description}" field="port">
+        <f:textbox default="8021"/>
+    </f:entry>
+
+    <f:entry title="${%dynatrace.systemprofile.title}" description="${%dynatrace.systemprofile.description}" field="systemProfile">
+        <f:textbox />
+    </f:entry>
+    <f:entry title="${%dynatrace.version.versionMajor.title}" description="${%dynatrace.version.versionMajor.description}" field="versionMajor">
+        <f:textbox />
+    </f:entry>
+    <f:entry title="${%dynatrace.version.versionMinor.title}" description="${%dynatrace.version.versionMinor.description}" field="versionMinor">
+        <f:textbox />
+    </f:entry>
+    <f:entry title="${%dynatrace.version.versionRevision.title}" description="${%dynatrace.version.versionRevision.description}" field="versionRevision">
+        <f:textbox />
+    </f:entry>
+    <f:entry title="${%dynatrace.version.versionMilestone.title}" description="${%dynatrace.version.versionMilestone.description}" field="versionMilestone">
+        <f:textbox />
+    </f:entry>
+
+    <f:entry>
+        <table style="width:100%">
+            <f:radioBlock name="authenticationMode" title="Username + Password" value="username" checked="${instance.getAuthType().equals('username')}">
+                <f:entry title="Dynatrace REST API Username" field="username" >
+                    <f:textbox />
+                </f:entry>
+
+                <f:entry title="Dynatrace REST API Password" field="password">
+                    <f:password />
+                </f:entry>
+            </f:radioBlock>
+
+            <f:radioBlock name="authenticationMode" title="Use the Credentials Plugin" value="credentialsPlugin" checked="${instance.getAuthType().equals('credentialsPlugin')}">
+                <f:entry title="Credentials" field="creds">
+                    <c:select />
+                </f:entry>
+            </f:radioBlock>
+        </table>
+    </f:entry>
+
+    <f:validateButton
+            title="${%dynatrace.connection.test.title}" progress="${%dynatrace.connection.test.progress}"
+            method="testDynatraceConnection" with="protocol,host,port,username,password,creds,systemProfile"/>
+</j:jelly>

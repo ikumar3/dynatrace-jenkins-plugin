@@ -35,7 +35,9 @@ package com.dynatrace.jenkins.dashboard;
 import hudson.model.Action;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
+import hudson.model.Run;
 import hudson.util.ChartUtil;
+import hudson.util.ChartUtil.NumberOnlyBuildLabel;
 import hudson.util.DataSetBuilder;
 import hudson.util.Graph;
 
@@ -72,7 +74,7 @@ public class TestAutomationProjectAction implements Action {
       this.graphTitle = title;
     }
     
-    protected abstract DataSetBuilder<String, ChartUtil.NumberOnlyBuildLabel> createDataSet();
+    protected abstract DataSetBuilder<String, NumberOnlyBuildLabel> createDataSet();
 
     protected JFreeChart createGraph() {
       CategoryDataset dataset = createDataSet().build();
@@ -171,14 +173,14 @@ public class TestAutomationProjectAction implements Action {
 //      }
 //    };
 
-    final Map<ChartUtil.NumberOnlyBuildLabel, Map<TestCaseStatus, Integer>> summaryMetrics= getSummaryMetricsFromReports(getExistingReportsList()); 
+    final Map<NumberOnlyBuildLabel, Map<TestCaseStatus, Integer>> summaryMetrics= getSummaryMetricsFromReports(getExistingReportsList());
   	
     final Graph graph = new GraphImpl("dynaTrace Test Automation Trend") {
 
-      protected DataSetBuilder<String, ChartUtil.NumberOnlyBuildLabel> createDataSet() {
-        DataSetBuilder<String, ChartUtil.NumberOnlyBuildLabel> dataSetBuilder =
-            new DataSetBuilder<String, ChartUtil.NumberOnlyBuildLabel>();
-        for (ChartUtil.NumberOnlyBuildLabel label : summaryMetrics.keySet()) {
+      protected DataSetBuilder<String, NumberOnlyBuildLabel> createDataSet() {
+        DataSetBuilder<String, NumberOnlyBuildLabel> dataSetBuilder =
+            new DataSetBuilder<String, NumberOnlyBuildLabel>();
+        for (NumberOnlyBuildLabel label : summaryMetrics.keySet()) {
         	Map<TestCaseStatus, Integer> summary = summaryMetrics.get(label);
         	for (TestCaseStatus s : summary.keySet()) {
 						dataSetBuilder.add(summary.get(s), s.toString(), label);
@@ -216,13 +218,13 @@ public class TestAutomationProjectAction implements Action {
     return taReportList;
   }
   
-  private Map<ChartUtil.NumberOnlyBuildLabel, Map<TestCaseStatus, Integer>> getSummaryMetricsFromReports(
+  private Map<NumberOnlyBuildLabel, Map<TestCaseStatus, Integer>> getSummaryMetricsFromReports(
       final List<TestAutomationReport> reports) {
-  	Map<ChartUtil.NumberOnlyBuildLabel, Map<TestCaseStatus, Integer>> result = new TreeMap<ChartUtil.NumberOnlyBuildLabel, Map<TestCaseStatus, Integer>>();
+  	Map<NumberOnlyBuildLabel, Map<TestCaseStatus, Integer>> result = new TreeMap<NumberOnlyBuildLabel, Map<TestCaseStatus, Integer>>();
     for (TestAutomationReport report : reports) {
     	if (report.getTestCaseSummary() != null) {
     		Map<TestCaseStatus, Integer> summary = report.getTestCaseSummary();
-    		result.put(new ChartUtil.NumberOnlyBuildLabel(report.getBuild()), summary);
+    		result.put(new NumberOnlyBuildLabel((Run)report.getBuild()), summary);
     	}
     }
 

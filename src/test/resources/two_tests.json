@@ -1,0 +1,30 @@
+{"testRun": {
+  "category":"performance","id":"c58bd738-cfc0-4f20-80a4-459eff96385b",
+  "numDegraded":0,"numFailed":0,"numImproved":0,"numInvalidated":0,"numPassed":48,"numVolatile":2,"startTime":9223372036854775807,
+  "systemProfile":"easyTravel",
+  "testResults":[
+    {"exectime":1423708887610,"measures":[{"expectedMax":0.7546857526826094,"expectedMin":0.0,
+    "metricGroup":"PurePaths","name":"PurePath CPU Duration","numDegradedRuns":0,"numFailingOrInvalidatedRuns":0,"numImprovedRuns":0,"numValidRuns":3,
+    "unit":"ms","value":0.039285000413656235,"violationPercentage":0.0},
+    {"expectedMax":0.8262431472425456,"expectedMin":0.0,"metricGroup":"PurePaths","name":"PurePath Response Time","numDegradedRuns":0,
+      "numFailingOrInvalidatedRuns":0,"numImprovedRuns":0,"numValidRuns":3,"unit":"ms","value":0.042667001485824585,"violationPercentage":0.0},
+      {"expectedMax":0.8276859313465805,"expectedMin":0.0,"metricGroup":"PurePaths","name":"PurePath Duration w/o Suspension","numDegradedRuns":0,
+        "numFailingOrInvalidatedRuns":0,"numImprovedRuns":0,"numValidRuns":3,"unit":"ms","value":0.042724609375,"violationPercentage":0.0},
+      {"expectedMax":0.0,"expectedMin":0.0,"metricGroup":"Error Detection","name":"Failed Transaction Count","numDegradedRuns":0,
+        "numFailingOrInvalidatedRuns":0,"numImprovedRuns":0,"numValidRuns":3,"unit":"num","value":0.0,"violationPercentage":0.0},
+      {"expectedMax":0.8276859313465805,"expectedMin":0.0,"metricGroup":"PurePaths","name":"PurePath Duration","numDegradedRuns":0,
+        "numFailingOrInvalidatedRuns":0,"numImprovedRuns":0,"numValidRuns":3,"unit":"ms","value":0.042724609375,"violationPercentage":0.0}],
+      "name":"AccountBeanTest.testFillMock","package":"com.dynatrace.easytravel.frontend.beans","status":"volatile"},
+    {"exectime":1423708919283,"measures":[{"expectedMax":14.871510560370226,"expectedMin":0.0,"metricGroup":"PurePaths",
+      "name":"PurePath CPU Duration","numDegradedRuns":0,"numFailingOrInvalidatedRuns":0,"numImprovedRuns":0,"numValidRuns":3,
+      "unit":"ms","value":2.580245018005371,"violationPercentage":0.0},{"expectedMax":84.36790249101568,"expectedMin":0.0,"metricGroup":
+    "PurePaths","name":"PurePath Response Time","numDegradedRuns":0,"numFailingOrInvalidatedRuns":0,"numImprovedRuns":0,"numValidRuns":3,
+      "unit":"ms","value":2.6557819843292236,"violationPercentage":0.0},{"expectedMax":84.3681869497976,"expectedMin":0.0,"metricGroup":
+    "PurePaths","name":"PurePath Duration w/o Suspension","numDegradedRuns":0,"numFailingOrInvalidatedRuns":0,"numImprovedRuns":0,"numValidRuns":3,
+      "unit":"ms","value":2.65576171875,"violationPercentage":0.0},{"expectedMax":0.0,"expectedMin":0.0,"metricGroup":"Error Detection",
+      "name":"Failed Transaction Count","numDegradedRuns":0,"numFailingOrInvalidatedRuns":0,"numImprovedRuns":0,"numValidRuns":3,"unit":"num",
+      "value":0.0,"violationPercentage":0.0},
+      {"expectedMax":84.3681869497976,"expectedMin":0.0,"metricGroup":"PurePaths","name":"PurePath Duration","numDegradedRuns":0,
+        "numFailingOrInvalidatedRuns":0,"numImprovedRuns":0,"numValidRuns":3,"unit":"ms","value":2.65576171875,"violationPercentage":0.0}],
+      "name":"JourneyBeanTest.testLoadJourney","package":"com.dynatrace.easytravel.frontend.beans","status":"passed"}]
+,"versionBuild":"3","versionMajor":"1","versionMilestone":"Milestone 2","versionMinor":"0","versionRevision":"9"}}

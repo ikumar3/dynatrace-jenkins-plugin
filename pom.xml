@@ -26,92 +26,107 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING 
 ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 DAMAGE.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.jenkins-ci.plugins</groupId>
-    <artifactId>plugin</artifactId>
-    <version>1.535</version><!-- which version of Jenkins is this plugin built against? -->
-  </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.jenkins-ci.plugins</groupId>
+        <artifactId>plugin</artifactId>
+        <version>1.598</version>
+        <!-- which version of Jenkins is this plugin built against? -->
+    </parent>
 
-  <artifactId>dynatrace-dashboard</artifactId>
-  <version>1.0.5</version>
-  <packaging>hpi</packaging>
+    <artifactId>dynatrace-dashboard</artifactId>
+    <version>1.0.6-SNAPSHOT</version>
+    <packaging>hpi</packaging>
 
-  <name>dynaTrace Test Automation Dashboard Plugin for Jenkins</name>
-  <url>https://community.compuwareapm.com/community/display/DL/Test+Automation+Plugin+for+Jenkins</url>
+    <name>dynaTrace Test Automation Dashboard Plugin for Jenkins</name>
+    <url>https://community.compuwareapm.com/community/display/DL/Test+Automation+Plugin+for+Jenkins</url>
 
-  <scm>
-    <url>https://github.com/wgottesheim/dynatrace-jenkins-plugin/</url>
-    <developerConnection>scm:git:git://github.com/wolfgang.gottesheim/dynatrace-jenkins-plugin.git</developerConnection>
-  </scm>
-  
-  <developers>
-    <developer>
-      <id>cwat-wgottesh</id>
-      <name>Wolfgang Gottesheim</name>
-      <email>wolfgang.gottesheim@compuware.com</email>
-    </developer>
-  </developers>
+    <scm>
+        <url>https://github.com/wgottesheim/dynatrace-jenkins-plugin/</url>
+        <developerConnection>scm:git:git://github.com/wolfgang.gottesheim/dynatrace-jenkins-plugin.git
+        </developerConnection>
+    </scm>
 
-  <properties>
-    <!-- http://docs.codehaus.org/display/MAVENUSER/POM+Element+for+Source+File+Encoding -->
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <compileSource>1.7</compileSource>
-    <compileTarget>1.7</compileTarget>
+    <developers>
+        <developer>
+            <id>cwat-wgottesh</id>
+            <name>Wolfgang Gottesheim</name>
+            <email>wolfgang.gottesheim@compuware.com</email>
+        </developer>
+    </developers>
 
-    <jersey.client.version>1.16</jersey.client.version>
-    <joda.time.version>2.1</joda.time.version>
-    <xstream.version>1.2.2</xstream.version>
-  </properties>
-  
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>${maven-clean-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>${maven-compiler-plugin.version}</version>
-          <configuration>
-            <source>${compileSource}</source>
-            <target>${compileTarget}</target>
-            <showDeprecation>true</showDeprecation>
-            <showWarnings>true</showWarnings>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
+    <properties>
+        <!-- http://docs.codehaus.org/display/MAVENUSER/POM+Element+for+Source+File+Encoding -->
+        <project.versionBuild.sourceEncoding>UTF-8</project.versionBuild.sourceEncoding>
+        <compileSource>1.7</compileSource>
+        <compileTarget>1.7</compileTarget>
 
-  <dependencies>
-    <dependency>
-      <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-client</artifactId>
-      <version>${jersey.client.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-json</artifactId>
-      <version>${jersey.client.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.jersey.contribs</groupId>
-      <artifactId>jersey-apache-client</artifactId>
-      <version>${jersey.client.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>joda-time</groupId>
-      <artifactId>joda-time</artifactId>
-      <version>${joda.time.version}</version>
-    </dependency>
-    <!-- <dependency>
-    	<groupId>xstream</groupId>
-    	<artifactId>xstream</artifactId>
-    	<version>${xstream.version}</version>
-    </dependency>  -->
-  </dependencies>
+        <jersey.client.version>1.18</jersey.client.version>
+        <jersey-apache-client4.version>1.9</jersey-apache-client4.version>
+        <joda.time.version>2.1</joda.time.version>
+        <xstream.version>1.2.2</xstream.version>
+    </properties>
+
+    <versionBuild>
+        <plugins>
+            <plugin>
+                <groupId>org.jenkins-ci.tools</groupId>
+                <artifactId>maven-hpi-plugin</artifactId>
+                <version>1.95</version>
+            </plugin>
+        </plugins>
+    </versionBuild>
+
+
+    <!--<versionBuild>-->
+    <!--<pluginManagement>-->
+    <!--<plugins>-->
+    <!--<plugin>-->
+    <!--<artifactId>maven-clean-plugin</artifactId>-->
+    <!--<version>${maven-clean-plugin.version}</version>-->
+    <!--</plugin>-->
+    <!--<plugin>-->
+    <!--<artifactId>maven-compiler-plugin</artifactId>-->
+    <!--<version>${maven-compiler-plugin.version}</version>-->
+    <!--<configuration>-->
+    <!--<source>${compileSource}</source>-->
+    <!--<target>${compileTarget}</target>-->
+    <!--<showDeprecation>true</showDeprecation>-->
+    <!--<showWarnings>true</showWarnings>-->
+    <!--</configuration>-->
+    <!--</plugin>-->
+    <!--</plugins>-->
+    <!--</pluginManagement>-->
+    <!--</versionBuild>-->
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.4</version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>${joda.time.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>1.7.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>credentials</artifactId>
+            <version>1.10</version>
+        </dependency>
+        <!-- <dependency>
+            <groupId>xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>${xstream.version}</version>
+        </dependency>  -->
+    </dependencies>
 
 </project>

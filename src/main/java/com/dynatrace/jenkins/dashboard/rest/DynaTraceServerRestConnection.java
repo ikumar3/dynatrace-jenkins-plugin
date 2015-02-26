@@ -32,16 +32,8 @@ DAMAGE.
  */
 package com.dynatrace.jenkins.dashboard.rest;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.client.apache.ApacheHttpClient;
-import com.sun.jersey.client.apache.config.DefaultApacheHttpClientConfig;
 
 public class DynaTraceServerRestConnection {
 
@@ -50,30 +42,31 @@ public class DynaTraceServerRestConnection {
 	public static final String DASHBOARD_PATH = "/rest/management/dashboard/";
 	public static final String OPEN_DASHBOARD_PATH = "/rest/integration/opendashboard";
 	
-	private WebResource restResource;
+//	private WebResource restResource;
 
 	public DynaTraceServerRestConnection(final String protocol, final String host,
 			final String port, final String username, final String password,
 			final String dashboardName) {
-		URI uri = null;
-		try {
-			uri = new URI(protocol, null, host, Integer.parseInt(port), DASHBOARD_PATH + dashboardName, null, null);
-		} catch (URISyntaxException e) {
-			throw new RuntimeException(e);
-		}
-		logger.info("Connecting to " + uri + " using username \"" + username+"\"");
-
-		DefaultApacheHttpClientConfig config = new DefaultApacheHttpClientConfig();
-		config.getState().setCredentials(null, null, -1, username, password);
-		Client restClient = ApacheHttpClient.create(config);
-		restClient.setFollowRedirects(true);
-
-		restResource = restClient.resource(uri);
+//		URI uri = null;
+//		try {
+//			uri = new URI(protocol, null, host, Integer.parseInt(port), DASHBOARD_PATH + dashboardName, null, null);
+//		} catch (URISyntaxException e) {
+//			throw new RuntimeException(e);
+//		}
+//		logger.info("Connecting to " + uri + " using username \"" + username+"\"");
+//
+//		DefaultApacheHttpClientConfig config = new DefaultApacheHttpClientConfig();
+//		config.getState().setCredentials(null, null, -1, username, password);
+//		Client restClient = ApacheHttpClient.create(config);
+//		restClient.setFollowRedirects(true);
+//
+//		restResource = restClient.resource(uri);
 	}
 
 	public String getDashboardReport() {
-		String s = restResource.get(ClientResponse.class).getEntity(String.class);
-		return s;
+//		String s = restResource.get(ClientResponse.class).getEntity(String.class);
+//		return s;
+      return "";
 	}
 
 	/*
@@ -95,21 +88,21 @@ public class DynaTraceServerRestConnection {
 	public boolean validateConnection() {
 		boolean validationResult = false;
 
-		try {
-			ClientResponse response = restResource.get(ClientResponse.class);
-
-			if (response.getStatus() == 200) {
-				String output = response.getEntity(String.class);
-				logger.info(String.format(
-						"Response from dynaTrace: code: %s, output: %s",
-						response.getStatus(), output));
-				validationResult = true;
-			}
-		} catch (Exception e) {
-			logger.log(Level.WARNING,
-					"Some problem connecting to the dynaTrace REST interface, see stack-trace for "
-							+ "more information", e);
-		}
+//		try {
+//			ClientResponse response = restResource.get(ClientResponse.class);
+//
+//			if (response.getStatus() == 200) {
+//				String output = response.getEntity(String.class);
+//				logger.info(String.format(
+//						"Response from dynaTrace: code: %s, output: %s",
+//						response.getStatus(), output));
+//				validationResult = true;
+//			}
+//		} catch (Exception e) {
+//			logger.log(Level.WARNING,
+//					"Some problem connecting to the dynaTrace REST interface, see stack-trace for "
+//							+ "more information", e);
+//		}
 
 		return validationResult;
 	}
@@ -125,10 +118,6 @@ public class DynaTraceServerRestConnection {
 		}
 
 		final String trimmedField = field.trim();
-		if (trimmedField.length() == 0) {
-			return true;
-		}
-
-		return false;
+		return trimmedField.length() == 0;
 	}
 }
