@@ -69,7 +69,7 @@ DAMAGE.
         <xstream.version>1.2.2</xstream.version>
     </properties>
 
-    <versionBuild>
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.jenkins-ci.tools</groupId>
@@ -77,10 +77,10 @@ DAMAGE.
                 <version>1.95</version>
             </plugin>
         </plugins>
-    </versionBuild>
+    </build>
 
 
-    <!--<versionBuild>-->
+    <!--<<build>>-->
     <!--<pluginManagement>-->
     <!--<plugins>-->
     <!--<plugin>-->
@@ -99,7 +99,7 @@ DAMAGE.
     <!--</plugin>-->
     <!--</plugins>-->
     <!--</pluginManagement>-->
-    <!--</versionBuild>-->
+    <!--</<build>>-->
 
     <dependencies>
         <dependency>
