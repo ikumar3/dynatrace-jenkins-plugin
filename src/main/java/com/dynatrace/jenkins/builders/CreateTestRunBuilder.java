@@ -27,6 +27,7 @@ import org.kohsuke.stapler.Stapler;
 import org.kohsuke.stapler.StaplerRequest;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -46,6 +47,15 @@ public class CreateTestRunBuilder extends Builder {
     @Override
     public String getDisplayName() {
       return DISPLAY_NAME;
+    }
+
+    public ListBoxModel doFillCategoryItems() {
+      ListBoxModel model = new ListBoxModel();
+      model.add("Unit");
+      model.add("Performance");
+      model.add("UI Driven");
+      model.add("Web API");
+      return model;
     }
 
     public static ListBoxModel doFillCredsItems() {
@@ -74,16 +84,56 @@ public class CreateTestRunBuilder extends Builder {
       return new CreateTestRunBuilder(formData);
     }
 
-    public FormValidation doTestDynatraceConnection(
+    public FormValidation doTestDynatraceConnectionUserPass(
             @QueryParameter("host") final String host,
             @QueryParameter("port") final String port,
             @QueryParameter("username") final String username,
             @QueryParameter("password") final String password,
-            @QueryParameter("creds") final String creds,
             @QueryParameter("systemProfile") final String systemProfile) {
       FormValidation validationResult;
 
       DynatraceServerEndpoint server = new DynatraceServerEndpointImpl(host, port, username, password);
+      TestConnectionResult result = server.testConnection(systemProfile);
+      if (result == TestConnectionResult.SUCCESS) {
+        validationResult = FormValidation.ok("Connection successful");
+      } else if (result == TestConnectionResult.SYSTEM_PROFILE_NOT_FOUND) {
+        validationResult = FormValidation.warning("Connection with Dynatrace REST interface succeeded, but system profile " + systemProfile + " could not be found");
+      } else if (result == TestConnectionResult.UNKNOWN_HOST) {
+        validationResult = FormValidation.warning("Connection with Dynatrace REST interface failed, because the host " + host + " could not be found");
+      } else if (result == TestConnectionResult.FORBIDDEN) {
+        validationResult = FormValidation.warning("Connection with Dynatrace REST interface failed, because the provided username/password combination is wrong or does not have permissions to use the REST API");
+      } else if (result == TestConnectionResult.TIMEOUT) {
+        validationResult = FormValidation.warning("Connection to " + host + " timed out");
+      } else {
+        validationResult = FormValidation.warning("Connection with Dynatrace REST interface failed");
+      }
+
+      return validationResult;
+    }
+
+
+    public FormValidation doTestDynatraceConnectionCredentials(
+            @QueryParameter("host") final String host,
+            @QueryParameter("port") final String port,
+            @QueryParameter("creds") final String creds,
+            @QueryParameter("systemProfile") final String systemProfile) {
+      FormValidation validationResult;
+
+      StandardUsernameCredentials myCredentials = null;
+      Item item = null;
+
+      List<StandardUsernameCredentials> credentialsList = CredentialsProvider.lookupCredentials(
+              StandardUsernameCredentials.class,
+              item,
+              ACL.SYSTEM);
+      for (StandardUsernameCredentials c : credentialsList) {
+        if (creds.equals(c.getId())) {
+          myCredentials = c;
+          break;
+        }
+      }
+
+      DynatraceServerEndpoint server = new DynatraceServerEndpointImpl(host, port, myCredentials.getUsername(), ((UsernamePasswordCredentials)myCredentials).getPassword().getPlainText());
       TestConnectionResult result = server.testConnection(systemProfile);
       if (result == TestConnectionResult.SUCCESS) {
         validationResult = FormValidation.ok("Connection successful");
@@ -111,6 +161,7 @@ public class CreateTestRunBuilder extends Builder {
   private String host;
   private String port;
 
+  private String category;
   private String major;
   private String minor;
   private String milestone;
@@ -138,6 +189,7 @@ public class CreateTestRunBuilder extends Builder {
     this.username = (String) authMode.get("username");
     this.password = (String) authMode.get("password");
     this.creds = (String) authMode.get("creds");
+
     this.host = (String) formData.get("host");
     this.port = (String) formData.get("port");
     this.systemProfile = (String) formData.get("systemProfile");
@@ -145,6 +197,7 @@ public class CreateTestRunBuilder extends Builder {
     this.minor = (String) formData.get("minor");
     this.milestone = (String) formData.get("milestone");
     this.revision = (String) formData.get("revision");
+    this.category = (String) formData.get("category");
   }
 
 
@@ -153,41 +206,71 @@ public class CreateTestRunBuilder extends Builder {
     return super.getDescriptor();
   }
 
-  private void getCredentials() {
+  private UsernamePasswordCredentials  getCredentials() {
+    String credentialId = this.getCreds();
+    StandardUsernameCredentials myCredentials = null;
+    Item item = null;
+
     List<StandardUsernameCredentials> credentialsList = CredentialsProvider.lookupCredentials(
             StandardUsernameCredentials.class,
-            (Item)null,
+            item,
             ACL.SYSTEM);
     for (StandardUsernameCredentials c : credentialsList) {
-      System.out.println(c.getDescriptor().getId() + ": " + c.getDescriptor().getDisplayName() +  " " + c.getUsername());
-
-      System.out.println(((UsernamePasswordCredentials)c).getPassword());
+      if (credentialId.equals(c.getId())) {
+        myCredentials = c;
+        break;
+      }
     }
+    return (UsernamePasswordCredentials) myCredentials;
   }
-//
-//  private String getPassword() {
-//    String authType = this.getAuthType();
-//    String password = null;
-//
-//    if (authType.equals(USER_PASS)) {
-//      password = this.getUsername();
-//    } else if (authType.equals(CREDENTIALS_PLUGIN)) {
-//      password = Secret.toString(this.getCredentials().getPassword());
-//    }
-//
-//    return password;
-//  }
+
+  /**
+   * Decides based on the authType if the password entered in the form properties or the credentials are used.
+   * @return the password for accessing the Dynatrace REST API
+   */
+  private String getDynatraceUsername() {
+    String authType = this.getAuthType();
+    String myUsername = null;
+
+    if (authType.equals(USER_PASS)) {
+      myUsername = username;
+    } else if (authType.equals(CREDENTIALS_PLUGIN)) {
+      myUsername = this.getCredentials().getUsername();
+    }
+
+    return myUsername;
+  }
+
+  /**
+   * Decides based on the authType if the password entered in the form properties or the credentials are used.
+   * @return the password for accessing the Dynatrace REST API
+   */
+  private String getDynatracePassword() {
+    String authType = this.getAuthType();
+    String myPassword = null;
+
+    if (authType.equals(USER_PASS)) {
+      myPassword = password;
+    } else if (authType.equals(CREDENTIALS_PLUGIN)) {
+      myPassword = Secret.toString(this.getCredentials().getPassword());
+    }
+
+    return myPassword;
+  }
 
   @Override
   public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) throws InterruptedException, IOException {
 //    getCredentials();
+    PrintStream logger = listener.getLogger();
     System.out.println(this);
+    DynatraceVersion version = new DynatraceVersion(category, major, minor, revision, milestone, build.getNumber());
     build.addAction(new TestrunIDContributorAction(
-            new DynatraceConnectionInfo(host, port, username, password),
+            logger,
+            new DynatraceConnectionInfo(host, port, getDynatraceUsername(), getDynatracePassword()),
             systemProfile,
-            new DynatraceVersion(major, minor, revision, milestone, build.getNumber())));
+            version));
     build.getEnvironment(listener);
-    getCredentials();
+
     return true;
   }
 
@@ -235,6 +318,14 @@ public class CreateTestRunBuilder extends Builder {
 
   public void setRevision(String revision) {
     this.revision = revision;
+  }
+
+  public String getCategory() {
+    return category;
+  }
+
+  public void setCategory(String category) {
+    this.category = category;
   }
 
   public String getSystemProfile() {
