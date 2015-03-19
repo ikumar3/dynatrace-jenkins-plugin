@@ -35,7 +35,7 @@ DAMAGE.
   </parent>
 
   <artifactId>dynatrace-dashboard</artifactId>
-  <version>1.0.5</version>
+  <version>1.0.6-SNAPSHOT</version>
   <packaging>hpi</packaging>
 
   <name>dynaTrace Test Automation Dashboard Plugin for Jenkins</name>
