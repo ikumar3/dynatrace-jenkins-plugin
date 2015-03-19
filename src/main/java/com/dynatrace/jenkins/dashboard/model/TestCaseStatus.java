@@ -33,7 +33,7 @@ DAMAGE.
 package com.dynatrace.jenkins.dashboard.model;
 
 public enum TestCaseStatus {
-	FAILED("Failed"), VOLATILE("Volatile"), DEGRADED("Degraded"), IMPROVED("Improved"), PASSED("Passed"), NONE("None");
+	FAILED("Failed"), VOLATILE("Volatile"), DEGRADED("Degraded"), IMPROVED("Improved"), PASSED("Passed"), INVALIDATED("Invalidated"), NONE("None");
 	
 	private String desc;
 	
