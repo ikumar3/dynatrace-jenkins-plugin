@@ -42,6 +42,10 @@ import com.dynatrace.jenkins.dashboard.TestAutomationReport;
 import com.dynatrace.jenkins.dashboard.rest.DynaTraceServerRestConnection;
 
 public class TestCase {
+    private static final String RED_ICON = "red.gif";
+    private static final String GREEN_ICON = "green.gif";
+    private static final String YELLOW_ICON = "yellow.gif";
+
 	private Set<TestMetric> testMetrics;
 	private String testCaseName;
 	private String platform;
@@ -53,13 +57,16 @@ public class TestCase {
 	}
 
 	public String getIcon() {
+        if (status == null) {
+            return RED_ICON;
+        }
 		switch (status) {
 		case PASSED:
-			return "green.gif";
+			return GREEN_ICON;
 		case VOLATILE:
-			return "yellow.gif";	
+			return YELLOW_ICON;
 		default:
-			return "red.gif";
+			return RED_ICON;
 		}
 	}
 
