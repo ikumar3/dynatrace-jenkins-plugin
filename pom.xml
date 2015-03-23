@@ -59,7 +59,7 @@ DAMAGE.
 
     <properties>
         <!-- http://docs.codehaus.org/display/MAVENUSER/POM+Element+for+Source+File+Encoding -->
-        <project.versionBuild.sourceEncoding>UTF-8</project.versionBuild.sourceEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <compileSource>1.7</compileSource>
         <compileTarget>1.7</compileTarget>
 
