@@ -1,6 +1,10 @@
 package com.dynatrace.jenkins.model;
 
 /**
+ * This class encapsulates the connection information required to access the Dynatrace server
+ * REST interface. As versions >= 6.2 only allow HTTPS connections, the protocol is not configurable
+ * as it will be always HTTPS.
+ *
  * Created by cwat-wgottesh on 24.02.2015.
  */
 public class DynatraceConnectionInfo {

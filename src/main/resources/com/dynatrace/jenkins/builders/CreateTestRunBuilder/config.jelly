@@ -9,16 +9,21 @@
     <f:entry title="${%dynatrace.systemprofile.title}" description="${%dynatrace.systemprofile.description}" field="systemProfile">
         <f:textbox />
     </f:entry>
-    <f:entry title="${%dynatrace.version.versionMajor.title}" description="${%dynatrace.version.versionMajor.description}" field="versionMajor">
+
+    <f:entry field="category" title="${%dynatrace.test.category.title}"
+             description="${%dynatrace.test.category.description}">
+        <f:select/>
+    </f:entry>
+    <f:entry title="${%dynatrace.version.major.title}" description="${%dynatrace.version.major.description}" field="major">
         <f:textbox />
     </f:entry>
-    <f:entry title="${%dynatrace.version.versionMinor.title}" description="${%dynatrace.version.versionMinor.description}" field="versionMinor">
+    <f:entry title="${%dynatrace.version.minor.title}" description="${%dynatrace.version.minor.description}" field="minor">
         <f:textbox />
     </f:entry>
-    <f:entry title="${%dynatrace.version.versionRevision.title}" description="${%dynatrace.version.versionRevision.description}" field="versionRevision">
+    <f:entry title="${%dynatrace.version.revision.title}" description="${%dynatrace.version.revision.description}" field="revision">
         <f:textbox />
     </f:entry>
-    <f:entry title="${%dynatrace.version.versionMilestone.title}" description="${%dynatrace.version.versionMilestone.description}" field="versionMilestone">
+    <f:entry title="${%dynatrace.version.milestone.title}" description="${%dynatrace.version.milestone.description}" field="milestone">
         <f:textbox />
     </f:entry>
 
@@ -29,20 +34,24 @@
                     <f:textbox />
                 </f:entry>
 
-                <f:entry title="Dynatrace REST API Password" field="password">
+                <f:entry title="Dynatrace REST API Password" field="password" >
                     <f:password />
                 </f:entry>
+                <f:validateButton
+                        title="${%dynatrace.connection.test.title}" progress="${%dynatrace.connection.test.progress}"
+                        method="testDynatraceConnectionUserPass" with="protocol,host,port,username,password,systemProfile"/>
             </f:radioBlock>
 
             <f:radioBlock name="authenticationMode" title="Use the Credentials Plugin" value="credentialsPlugin" checked="${instance.getAuthType().equals('credentialsPlugin')}">
                 <f:entry title="Credentials" field="creds">
                     <c:select />
                 </f:entry>
+                <f:validateButton
+                        title="${%dynatrace.connection.test.title}" progress="${%dynatrace.connection.test.progress}"
+                        method="testDynatraceConnectionCredentials" with="protocol,host,port,creds,systemProfile"/>
             </f:radioBlock>
         </table>
     </f:entry>
 
-    <f:validateButton
-            title="${%dynatrace.connection.test.title}" progress="${%dynatrace.connection.test.progress}"
-            method="testDynatraceConnection" with="protocol,host,port,username,password,creds,systemProfile"/>
+
 </j:jelly>

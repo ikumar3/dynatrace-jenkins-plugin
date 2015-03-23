@@ -147,21 +147,38 @@ public class DynatraceServerEndpointImpl implements DynatraceServerEndpoint {
   @Override
   public DynatraceTestRunInfo registerTestRun(String systemProfile, DynatraceVersion version) {
     DynatraceTestRunInfo testRun = null;
+    // build the URI we use - contains the system profile
     URI testRunURI = buildURI(String.format(REGISTER_TEST_RUN, systemProfile));
     // build JSON document from version
     Gson gson = new Gson();
     String json = gson.toJson(version);
     HttpClient client = getClient();
+
+    // post the JSON document to the URI we build above
     HttpPost post = new HttpPost(testRunURI);
     post.setEntity(new StringEntity(json, ContentType.APPLICATION_JSON));
+
+    BufferedReader rd;
     try {
       HttpResponse response = client.execute(post);
-      BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-      DynatraceTestRunWrapper data = gson.fromJson(rd, DynatraceTestRunWrapper.class);
-      testRun = data.getTestRun();
+      if (response.getStatusLine().getStatusCode() == 201) {
+        rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        DynatraceTestRunWrapper data = gson.fromJson(rd, DynatraceTestRunWrapper.class);
+        testRun = data.getTestRun();
+        if (testRun != null) {
+          logger.info("Registered a new test run with Dynatrace@"+host+", ID " + testRun.getId());
+        } else {
+          logger.warning("Test run could not be registered with Dynatrace@"+host);
+        }
+      } else {
+        logger.warning("Test run could not be registered: server replied with " + response.getStatusLine().toString());
+      }
     } catch (IOException e) {
       e.printStackTrace();
+    } catch (com.google.gson.JsonParseException e) {
+      logger.warning("Registering test run with Dynatrace@"+host+" failed with " + e.getMessage());
     }
+
     return testRun;
   }
 
@@ -196,6 +213,15 @@ public class DynatraceServerEndpointImpl implements DynatraceServerEndpoint {
     } else {
       return TestConnectionResult.OTHER_ERROR;
     }
+  }
+
+  @Override
+  public String getDashboardReport(String dashboardName) {
+    HttpClient client = getClient();
+    HttpGet get = new HttpGet(buildURI(String.format("", dashboardName));
+//		String s = restResource.get(ClientResponse.class).getEntity(String.class);
+//		return s;
+    return "";
   }
 }
 

@@ -1,8 +1,9 @@
 package com.dynatrace.jenkins.model;
 
-import com.dynatrace.jenkins.model.DynatraceTestRunInfo;
-
 /**
+ * Wrapper that points to a testRun. Seems to be the easiest way to support the JSON format the Dynatrace
+ * Server returns...
+ *
  * Created by cwat-wgottesh on 26.02.2015.
  */
 public class DynatraceTestRunWrapper {

@@ -1,7 +1,7 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
 	<l:layout title="dynaTrace Test Automation Details for Build" xmlns:jm="/com/dynatrace/jenkins/dashboard/tags"
 		css="${JENKINS_CONTEXT_PATH}/plugin/dynatrace-dashboard/css/style.css">
-		<st:include it="${it.versionBuild}" page="sidepanel.jelly" />
+		<st:include it="${it.build}" page="sidepanel.jelly" />
 		<l:main-panel>
 			<script type="text/javascript" src="${rootURL}/plugin/dynatrace-dashboard/js/effects.js"></script>
 			<script type="text/javascript" src="${rootURL}/plugin/dynatrace-dashboard/js/scriptaculous.js"></script>
@@ -10,7 +10,7 @@
 			<div id="test-accordion" class="accordion">      
 				<j:set var="report" value="${it.getCurrentReport()}" />
 				<j:set var="previousReport" value="${report.getLastBuildReport()}" />
-				<h1>dynaTrace Test Automation Report for Build ${report.buildAction.versionBuild.number}</h1>
+				<h1>dynaTrace Test Automation Report for Build ${report.buildAction.build.number}</h1>
 	
 				<j:if test="${report.failedCount > 0}">
 		     		<h2 id="failed_toggle" onclick="var theDiv = $(this).next(); if(theDiv.style.display=='none') { theDiv.appear(); } else { theDiv.hide(); }">${report.failedCount} Failed Tests (click to toggle)</h2>

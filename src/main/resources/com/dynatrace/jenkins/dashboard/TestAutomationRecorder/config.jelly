@@ -34,7 +34,7 @@ This is the configuration section for dynaTrace Test Automation Reporting
 
   <f:section title="Advanced Settings">
     <f:advanced>
-      <f:entry title="${%dynatrace.fail.versionBuild.title}" description="${%dynatrace.fail.versionBuild.description}">
+      <f:entry title="${%dynatrace.fail.build.title}" description="${%dynatrace.fail.build.description}">
         <f:checkbox field="failBuildWhendTFails" default="true"/>
       </f:entry>
       

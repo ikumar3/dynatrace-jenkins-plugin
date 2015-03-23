@@ -11,4 +11,6 @@ public interface DynatraceServerEndpoint {
   public DynatraceTestRunInfo registerTestRun(String systemProfile, DynatraceVersion version);
 
   TestConnectionResult testConnection(String systemProfile);
+
+  String getDashboardReport(String dashboardName);
 }
