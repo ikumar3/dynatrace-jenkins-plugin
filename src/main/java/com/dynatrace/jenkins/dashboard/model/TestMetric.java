@@ -34,8 +34,10 @@ package com.dynatrace.jenkins.dashboard.model;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
@@ -45,6 +47,13 @@ public class TestMetric implements Comparable<TestMetric> {
 			.dateTime();
 	private transient static final DateFormat FORMATTER = SimpleDateFormat
 			.getDateTimeInstance();
+    private transient static final NumberFormat NUMBER_FORMAT;
+
+    static {
+        NUMBER_FORMAT = NumberFormat.getInstance(Locale.US);
+        NUMBER_FORMAT.setMaximumFractionDigits(2);
+        NUMBER_FORMAT.setMinimumFractionDigits(2);
+    }
 
 	private String measure = "";
 	private String metricgroup = "";
@@ -130,10 +139,10 @@ public class TestMetric implements Comparable<TestMetric> {
 	private String createStringWith2Dec(String v) {
 		if (v.indexOf(".") > -1) {
 			Double d = Double.parseDouble(v);
-			DecimalFormat df = new DecimalFormat("#.##");
-			return df.format(d);
-		} else
-			return value;
+			return NUMBER_FORMAT.format(d);
+		} else {
+            return v;
+        }
 	}
 
 	public boolean isFailed() {
